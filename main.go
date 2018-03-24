@@ -15,12 +15,13 @@ func main() {
 
 		if err != nil {
 			fmt.Println(err)
+			time.Sleep(2000 * time.Millisecond)
 			continue
 		}
-		fmt.Fprintf(conn, "NICK atomixxxbot"+"\n")
-		fmt.Fprintf(conn, "USER golang  8 * :golang ircbot"+"\n")
-	    fmt.Fprintf(conn, "JOIN #ALEJOCHAN"+"\n")
-	
+		fmt.Fprintln(conn, "NICK atomixxxbot")
+		fmt.Fprintln(conn, "USER golang  8 * :golang ircbot")
+		fmt.Fprintln(conn, "JOIN #ALEJOCHAN")
+		
 		MyReader := bufio.NewReader(conn)
 	  	for { 
 	    	message, err := MyReader.ReadString('\n')
@@ -46,21 +47,21 @@ func main() {
 				if text[2][0:1] == "#" {
 					fmt.Println("Message detected from channel")
 					// logic to respond the same thing to a channel / repeater BOT
-					response = "PRIVMSG " + text[2] + " " + strings.Join(text[3:]," ") +"\n"
+					response = "PRIVMSG " + text[2] + " " + strings.Join(text[3:]," ") 
 				} else {
-					fmt.Println("Message detected for user")
+					fmt.Println("Message detected from user")
 					userto := strings.Split(text[0],"!")
 					// logic to respond the same thing to a user / repeater BOT
-					response = "PRIVMSG " + userto[0][1:] + " " + strings.Join(text[3:]," ") +"\n"
+					response = "PRIVMSG " + userto[0][1:] + " " + strings.Join(text[3:]," ") 
 				}
-				fmt.Fprintf(conn,response)
+				fmt.Fprintln(conn,response)
 				fmt.Println("<<"+response)
 				
 			}
 			// atomixxx: Ping/Pong handler to avoid timeout from the irc server
 			if len(text) == 2 && text[0] == "PING"  {
-				pong := "PONG "+text[1]+"\n"
-				fmt.Fprintf(conn, pong)
+				pong := "PONG "+text[1]
+				fmt.Fprintln(conn, pong)
 				fmt.Println("<<"+pong)
 			}
 			
