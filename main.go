@@ -40,13 +40,13 @@ func main() {
 				if io.EOF == err {
 					conn.Close()
 					fmt.Println("server closed connection")
-					break
 				}
 				time.Sleep(2000 * time.Millisecond)
+				break
 			}
 			
-	    	fmt.Print(time.Now().Format(time.Stamp)+">>"+message)
-	
+			fmt.Print(time.Now().Format(time.Stamp)+">>"+message)
+			
 			// atomixxx: Split the message into words to better compare between different commands
 			text := strings.Split(message," ")
 			//fmt.Println("Number of objects in text: "+ strconv.Itoa(len(text)))
@@ -57,7 +57,7 @@ func main() {
 				respond = true
 				var repeat bool = true
 				var respondTo string
-				// logic to differ if message is channel or private from user
+				//atomixxx logic to differ if message is channel or private from user
 				if text[2][0:1] == "#" {
 					fmt.Println("Message detected from channel")
 					// logic to respond the same thing to a channel / repeater BOT
@@ -97,11 +97,11 @@ func main() {
 	}
 
 }
+
 func processCommand(command[] string) string {
 		var bodyString string
-		fmt.Println("Command request inside process: " +command[0] +"|" )
+		fmt.Println("Command request inside process: " +command[0] )
 		if command[0] == "api" {
-			fmt.Println("api!")
 			req, err := http.NewRequest("GET", "http://47.88.174.2:3000/api/transactions/71527525", nil)
 			if err != nil {
 				fmt.Println("Error in newRequest: ", err)
