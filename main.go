@@ -34,17 +34,18 @@ func main() {
 		MyReader := bufio.NewReader(conn)
 	  	for { 
 	    	message, err := MyReader.ReadString('\n')
-			// atomixxx: To handle if connection is closed, and terminate the program.
+			// atomixxx: To handle if connection is closed, and jump to next execution.
 			if err != nil {
-				fmt.Println(err)
+				fmt.Println(time.Now().Format(time.Stamp)+">>>"+err.Error())
 				if io.EOF == err {
 					conn.Close()
 					fmt.Println("server closed connection")
 					break
 				}
+				time.Sleep(2000 * time.Millisecond)
 			}
 			
-	    	fmt.Print(">>"+message)
+	    	fmt.Print(time.Now().Format(time.Stamp)+">>"+message)
 	
 			// atomixxx: Split the message into words to better compare between different commands
 			text := strings.Split(message," ")
