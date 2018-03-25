@@ -50,10 +50,11 @@ func main() {
 			// atomixxx: Split the message into words to better compare between different commands
 			text := strings.Split(message," ")
 			//fmt.Println("Number of objects in text: "+ strconv.Itoa(len(text)))
-			
+			var respond bool=false
+			var response string
 			// atomixxx: Logic to detect messages, BOT logic should go inside this
 			if len(text) >= 4 && text[1] == "PRIVMSG" {
-				var response string
+				respond = true
 				var repeat bool = true
 				var respondTo string
 				// logic to differ if message is channel or private from user
@@ -67,26 +68,29 @@ func main() {
 					respondTo = userto[0][1:]
 					// logic to respond the same thing to a user / repeater BOT
 				}
+				// If its a command BOT will execute the command given
 				if text[3] == ":!command:" {
 					repeat = false
 					commandresponse := processCommand(text[4:])
 					response = "PRIVMSG " + respondTo + " :" + commandresponse 
-					fmt.Fprintln(conn,response)
-					fmt.Println("<<"+response)
+
 				} 
+				// If is not a command BOT will repeat the same thing
 				if repeat == true {
 					response = "PRIVMSG " + respondTo + " " + strings.Join(text[3:]," ") 
-					fmt.Fprintln(conn,response)
-					fmt.Println("<<"+response)
+
 				}
 			}
 			// atomixxx: Ping/Pong handler to avoid timeout disconnect from the irc server
 			if len(text) == 2 && text[0] == "PING"  {
-				pong := "PONG "+text[1]
-				fmt.Fprintln(conn, pong)
-				fmt.Println("<<"+pong)
+				response = "PONG "+text[1]
+				respond = true
 			}
-			
+			// This checks if the received text requires response or not, and respond according to the above logic
+			if respond == true {
+				fmt.Fprintln(conn,response)
+				fmt.Println(time.Now().Format(time.Stamp)+"<<"+response)	
+			}
 	  	}
 		// atomixxx: If connection is closed, will try to reconnect after 2 seconds
 		time.Sleep(2000 * time.Millisecond)
