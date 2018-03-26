@@ -4,7 +4,7 @@ import "net/http"
 import "io/ioutil"
 import "fmt"
 
-func processCommand(command[] string) string {
+func ProcessCommand(command[] string) string {
 	var bodyString string
 	fmt.Println("Command request inside process: " +command[0] )
 	if command[0] == "api" {

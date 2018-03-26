@@ -9,7 +9,7 @@ import "time"
 import "parallel/command"
 
 
-func startIRCprocess() {
+func StartIRCprocess() {
 	for {
 		conn, err := net.Dial("tcp", "chat.freenode.net:6667")
 
@@ -62,7 +62,7 @@ func startIRCprocess() {
 			  // If its a command BOT will execute the command given
 			  if text[3] == ":!command:" {
 				  repeat = false
-				  commandresponse := command.processCommand(text[4:])
+				  commandresponse := command.ProcessCommand(text[4:])
 				  response = "PRIVMSG " + respondTo + " :" + commandresponse 
 
 			  } 
