@@ -68,7 +68,7 @@ func StartIRCprocess(configpath string) {
 			  // If its a command BOT will execute the command given
 			  if text[3] == ":!command:" {
 				  repeat = false
-				  commandresponse := command.ProcessCommand(text[4:],allconfig.API)
+				  commandresponse := command.ProcessCommand(text[4:],allconfig)
 				  response = "PRIVMSG " + respondTo + " :" + commandresponse 
 
 			  } 

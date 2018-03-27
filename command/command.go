@@ -5,13 +5,14 @@ import (
 	"io/ioutil"
 	"net/http"
 	"strings"
+	"parallel/config"
 )
 
-func ProcessCommand(command []string, configapi []string) string {
+func ProcessCommand(command []string, allconfig *config.Configuration) string {
 	var bodyString string
 	fmt.Println("Command request inside process: " + command[0])
 	if command[0] == "api" {
-		req, err := http.NewRequest("GET", strings.Join(configapi,""), nil)
+		req, err := http.NewRequest("GET", strings.Join(allconfig.API,""), nil)
 		if err != nil {
 			fmt.Println("Error in newRequest: ", err)
 
