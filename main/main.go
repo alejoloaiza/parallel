@@ -1,10 +1,11 @@
 package main
 
 import "parallel/irc"
-
+import "os"
 
 func main() {
-	irc.StartIRCprocess();
+	arg := os.Args[1]
+	irc.StartIRCprocess(arg);
 
 
 }

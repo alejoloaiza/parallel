@@ -7,21 +7,27 @@ import "io"
 import "strings"
 import "time"
 import "parallel/command"
+import "parallel/config"
+
+func StartIRCprocess(configpath string) {
 
 
-func StartIRCprocess() {
+	allconfig := config.GetConfig(configpath)
+
 	for {
-		conn, err := net.Dial("tcp", "chat.freenode.net:6667")
+		conn, err := net.Dial("tcp", strings.Join(allconfig.ServerPort,""))
 
 	  if err != nil {
 		  fmt.Println(err)
 		  time.Sleep(2000 * time.Millisecond)
 		  continue
 	  }
-	  fmt.Fprintln(conn, "NICK atomixxxbot")
-	  fmt.Fprintln(conn, "USER golang  8 * :golang ircbot")
-	  fmt.Fprintln(conn, "JOIN #ALEJOCHAN")
-	  
+
+	  fmt.Fprintln(conn, "NICK "+ strings.Join(allconfig.Nick,""))
+	  fmt.Fprintln(conn, "USER "+ strings.Join(allconfig.User,""))
+	  fmt.Fprintln(conn, "JOIN "+ strings.Join(allconfig.Channels,""))
+
+
 	  MyReader := bufio.NewReader(conn)
 		for { 
 		  message, err := MyReader.ReadString('\n')
@@ -62,7 +68,7 @@ func StartIRCprocess() {
 			  // If its a command BOT will execute the command given
 			  if text[3] == ":!command:" {
 				  repeat = false
-				  commandresponse := command.ProcessCommand(text[4:])
+				  commandresponse := command.ProcessCommand(text[4:],allconfig.API)
 				  response = "PRIVMSG " + respondTo + " :" + commandresponse 
 
 			  } 

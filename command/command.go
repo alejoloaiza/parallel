@@ -1,17 +1,20 @@
 package command
 
-import "net/http"
-import "io/ioutil"
-import "fmt"
+import (
+	"fmt"
+	"io/ioutil"
+	"net/http"
+	"strings"
+)
 
-func ProcessCommand(command[] string) string {
+func ProcessCommand(command []string, configapi []string) string {
 	var bodyString string
-	fmt.Println("Command request inside process: " +command[0] )
+	fmt.Println("Command request inside process: " + command[0])
 	if command[0] == "api" {
-		req, err := http.NewRequest("GET", "http://47.88.174.2:3000/api/transactions/71527525", nil)
+		req, err := http.NewRequest("GET", strings.Join(configapi,""), nil)
 		if err != nil {
 			fmt.Println("Error in newRequest: ", err)
-			
+
 		}
 		client := &http.Client{}
 		resp, err := client.Do(req)
@@ -25,6 +28,6 @@ func ProcessCommand(command[] string) string {
 			fmt.Println(bodyString)
 		}
 	}
-	
+
 	return bodyString
 }

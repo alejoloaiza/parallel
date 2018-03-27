@@ -1,0 +1,7 @@
+{
+    "Nick": ["atomixxxbot"],
+    "Channels": ["#alejochan"],
+    "User": ["golang  8 * :golang ircbot"],
+    "ServerPort": ["irc.freenode.net:6667"],
+    "API": ["http://47.88.174.2:3000/api/transactions/71527525"]
+}
