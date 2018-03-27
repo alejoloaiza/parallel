@@ -5,11 +5,11 @@ import "os"
 import "fmt"
 
 type Configuration struct {
-	Nick     []string
-	Channels []string
-	User     []string
-	API      []string
-	ServerPort      []string
+	Nick       []string
+	Channels   []string
+	User       []string
+	API        []string
+	ServerPort []string
 }
 
 func GetConfig(configpath string) *Configuration {
