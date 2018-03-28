@@ -2,10 +2,6 @@ package collyclient
 
 import (
 	"fmt"
-	"io/ioutil"
-	"net/http"
-	"os"
-	"time"
 	"github.com/gocolly/colly"
 	"strings"
 )
@@ -20,9 +16,16 @@ func Initcollyclient() {
 	)
 
 	c.OnHTML("li", func(e *colly.HTMLElement) {
-		li := e.Attr("li")
-		//fmt.Println("Li Found: " + e.Text + ":" + li)
-		if strings.Contains(e.Text,"Sector") {
+		//		li := e.Attr("li")
+		TextTitle := strings.TrimSpace(e.ChildText("b.col_50"))
+		if TextTitle == "Código" || TextTitle == "Sector" || TextTitle == "Área" || TextTitle == "Precio" {
+			TextValue := strings.TrimSpace(e.ChildText("div.col_50"))
+			fmt.Println("Record found: " + TextTitle + ":"  + TextValue)
+			fmt.Println("Actual page is: " + e.Request.URL.String())
+		}
+		
+		//fmt.Println("Li Li: " + li)
+		/*if strings.Contains(e.Text,"Sector") {
 			fmt.Println("Found: " + e.Text + ":" + li)
 		}
 		if strings.Contains(e.Text,"Precio") {
@@ -33,7 +36,7 @@ func Initcollyclient() {
 		}
 		if strings.Contains(e.Text,"Código") {
 			fmt.Println("Found: " + e.Text + ":" + li)
-		}
+		}*/
 	})
 
 
@@ -44,14 +47,13 @@ func Initcollyclient() {
 		//fmt.Printf("Link found: %q -> %s\n", e.Text, link)
 		// Visit link found on page
 		// Only those links are visited which are in AllowedDomains
+		if strings.HasPrefix(link, "/webs/santafe/pages/basico") || strings.HasPrefix(link, "/webs/santafe/inmueble")  {
+			c.Visit(e.Request.AbsoluteURL(link))
+		}else{
+			return
+		}
+
 		
-		if strings.HasPrefix(link, "/webs/santafe/Pages/recomendar") {
-			return
-		}
-		if strings.Contains(link,".pdf")  {
-			return
-		}
-		c.Visit(e.Request.AbsoluteURL(link))
 	})
 
 
@@ -63,63 +65,5 @@ func Initcollyclient() {
 
 	// Start scraping on https://hackerspaces.org
 	c.Visit("http://www.arrendamientossantafe.com/webs/santafe/pages/basico?bussines_type=Arrendar")
-}
-
-
-
-
-func generateFormData() map[string][]byte {
-	f, _ := os.Open("gocolly.png")
-	defer f.Close()
-
-	imgData, _ := ioutil.ReadAll(f)
-
-	return map[string][]byte{
-		"firstname": []byte("one"),
-		"lastname":  []byte("two"),
-		"email":     []byte("onetwo@example.com"),
-		"file":      imgData,
-	}
-}
-
-func setupServer() {
-	var handler http.HandlerFunc = func(w http.ResponseWriter, r *http.Request) {
-		fmt.Println("received request")
-		err := r.ParseMultipartForm(10000000)
-		if err != nil {
-			fmt.Println("server: Error")
-			w.WriteHeader(500)
-			w.Write([]byte("<html><body>Internal Server Error</body></html>"))
-			return
-		}
-		w.WriteHeader(200)
-		fmt.Println("server: OK")
-		w.Write([]byte("<html><body>Success</body></html>"))
-	}
-
-	go http.ListenAndServe(":8080", handler)
-}
-
-func Multipart() {
-	// Start a single route http server to post an image to.
-	setupServer()
-
-	c := colly.NewCollector(colly.AllowURLRevisit(), colly.MaxDepth(5))
-
-	// On every a element which has href attribute call callback
-	c.OnHTML("html", func(e *colly.HTMLElement) {
-		fmt.Println(e.Text)
-		time.Sleep(1 * time.Second)
-		e.Request.PostMultipart("http://localhost:8080/", generateFormData())
-	})
-
-	// Before making a request print "Visiting ..."
-	c.OnRequest(func(r *colly.Request) {
-		fmt.Println("Posting gocolly.jpg to", r.URL.String())
-	})
-
-	// Start scraping
-	c.PostMultipart("http://localhost:8080/", generateFormData())
-	c.Wait()
 }
 
