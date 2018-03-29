@@ -6,12 +6,18 @@ import (
 	"net/http"
 	"parallel/config"
 	"strings"
+	"parallel/collyclient"
 )
 
 func ProcessCommand(command []string, allconfig *config.Configuration) string {
 	var bodyString string
 	fmt.Println("Command request inside process: " + command[0])
-	if command[0] == "api" {
+	if (strings.TrimSpace(command[0]) == "webscraping" && strings.TrimSpace(command[1]) == "agency1") {
+		bodyString = "Executed successfully in background as gorutine"
+		go collyclient.Initcollyclient_Agency1()
+		
+	}
+	if strings.TrimSpace(command[0]) == "api" {
 		req, err := http.NewRequest("GET", strings.Join(allconfig.API, ""), nil)
 		if err != nil {
 			fmt.Println("Error in newRequest: ", err)

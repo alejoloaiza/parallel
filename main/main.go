@@ -1,12 +1,15 @@
 package main
 
-//import "parallel/irc"
-import "parallel/collyclient"
-//import "os"
+import (
+	"parallel/irc"
+	"os"
+)
 
 func main() {
-	//arg := os.Args[1]
-	collyclient.Initcollyclient()
-	//irc.StartIRCprocess(arg)
+	arg := "../config/config.json"
+	if len(os.Args) > 1 { arg = os.Args[1] }
+
+	//collyclient.Initcollyclient_Agency1()
+	irc.StartIRCprocess(arg)
 
 }

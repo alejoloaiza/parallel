@@ -7,63 +7,53 @@ import (
 )
 
 
-func Initcollyclient() {
-	// Instantiate default collector
+func Initcollyclient_Agency1() {
+
+	var RowSector string
+	var RowCode string
+	var RowArea string
+	var RowPrice string
+	var RowNumrooms string
+	var RowNumbaths string
+
 	c := colly.NewCollector(
-		// Visit only domains: hackerspaces.org, wiki.hackerspaces.org
 		colly.AllowedDomains("www.arrendamientossantafe.com"),
 
 	)
 
 	c.OnHTML("li", func(e *colly.HTMLElement) {
-		//		li := e.Attr("li")
 		TextTitle := strings.TrimSpace(e.ChildText("b.col_50"))
-		if TextTitle == "Código" || TextTitle == "Sector" || TextTitle == "Área" || TextTitle == "Precio" {
-			TextValue := strings.TrimSpace(e.ChildText("div.col_50"))
-			fmt.Println("Record found: " + TextTitle + ":"  + TextValue)
-			fmt.Println("Actual page is: " + e.Request.URL.String())
+		switch TextTitle {
+		case "Código": RowCode=e.ChildText("div.col_50")
+		case "Sector": RowSector=e.ChildText("div.col_50")
+		case "Área": RowArea=e.ChildText("div.col_50")
+		case "Precio": RowPrice=e.ChildText("div.col_50")
+		case "Nº de alcobas": RowNumrooms=e.ChildText("div.col_50")
+		case "Nº de baños": RowNumbaths=e.ChildText("div.col_50")
 		}
 		
-		//fmt.Println("Li Li: " + li)
-		/*if strings.Contains(e.Text,"Sector") {
-			fmt.Println("Found: " + e.Text + ":" + li)
-		}
-		if strings.Contains(e.Text,"Precio") {
-			fmt.Println("Found: " + e.Text + ":" + li)
-		}
-		if strings.Contains(e.Text,"Área") {
-			fmt.Println("Found: " + e.Text + ":" + li)
-		}
-		if strings.Contains(e.Text,"Código") {
-			fmt.Println("Found: " + e.Text + ":" + li)
-		}*/
 	})
 
+	c.OnScraped(func(r *colly.Response) {
+		//fmt.Println("Finished", r.Request.URL)
+		fmt.Printf("Code %s Sector %s Area %s Price %s Rooms %s Baths %s ",RowCode,RowSector,RowArea,RowPrice,RowNumrooms,RowNumbaths)
+		fmt.Println("Finished ", r.Request.URL)
+	})
 
 	// On every a element which has href attribute call callback
 	c.OnHTML("a[href]", func(e *colly.HTMLElement) {
 		link := e.Attr("href")
-		// Print link
-		//fmt.Printf("Link found: %q -> %s\n", e.Text, link)
-		// Visit link found on page
-		// Only those links are visited which are in AllowedDomains
 		if strings.HasPrefix(link, "/webs/santafe/pages/basico") || strings.HasPrefix(link, "/webs/santafe/inmueble")  {
 			c.Visit(e.Request.AbsoluteURL(link))
 		}else{
 			return
 		}
-
-		
 	})
-
-
-
-	// Before making a request print "Visiting ..."
+/*
 	c.OnRequest(func(r *colly.Request) {
 		fmt.Println("Visiting", r.URL.String())
 	})
-
-	// Start scraping on https://hackerspaces.org
+*/
 	c.Visit("http://www.arrendamientossantafe.com/webs/santafe/pages/basico?bussines_type=Arrendar")
 }
 
