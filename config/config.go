@@ -5,11 +5,16 @@ import "os"
 import "fmt"
 
 type Configuration struct {
-	Nick       []string
-	Channels   []string
-	User       []string
+	IRCNick       []string
+	IRCChannels   []string
+	IRCUser       []string
 	API        []string
-	ServerPort []string
+	IRCServerPort []string
+	DBHost		[]string
+	DBPort		[]string
+	DBUser		[]string
+	DBPass		[]string
+	DBName		[]string
 }
 
 func GetConfig(configpath string) *Configuration {

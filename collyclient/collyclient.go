@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/gocolly/colly"
 	"strings"
+	"parallel/db"
 )
 
 
@@ -38,6 +39,7 @@ func Initcollyclient_Agency1() {
 		//fmt.Println("Finished", r.Request.URL)
 		fmt.Printf("Code %s Sector %s Area %s Price %s Rooms %s Baths %s ",RowCode,RowSector,RowArea,RowPrice,RowNumrooms,RowNumbaths)
 		fmt.Println("Finished ", r.Request.URL)
+		db.DBInsert(RowCode,"Santafe", RowSector, RowPrice, RowArea, RowNumrooms, RowNumbaths, r.Request.URL.String(), "Active")
 	})
 
 	// On every a element which has href attribute call callback

@@ -3,6 +3,7 @@ package main
 import (
 	"parallel/irc"
 	"os"
+	"parallel/db"
 )
 
 func main() {
@@ -10,6 +11,8 @@ func main() {
 	if len(os.Args) > 1 { arg = os.Args[1] }
 
 	//collyclient.Initcollyclient_Agency1()
+	db.DBConnect(arg)
 	irc.StartIRCprocess(arg)
+	
 
 }

@@ -14,7 +14,7 @@ func StartIRCprocess(configpath string) {
 	allconfig := config.GetConfig(configpath)
 
 	for {
-		conn, err := net.Dial("tcp", strings.Join(allconfig.ServerPort, ""))
+		conn, err := net.Dial("tcp", strings.Join(allconfig.IRCServerPort, ""))
 
 		if err != nil {
 			fmt.Println(err)
@@ -22,9 +22,9 @@ func StartIRCprocess(configpath string) {
 			continue
 		}
 
-		fmt.Fprintln(conn, "NICK "+strings.Join(allconfig.Nick, ""))
-		fmt.Fprintln(conn, "USER "+strings.Join(allconfig.User, ""))
-		fmt.Fprintln(conn, "JOIN "+strings.Join(allconfig.Channels, ""))
+		fmt.Fprintln(conn, "NICK "+strings.Join(allconfig.IRCNick, ""))
+		fmt.Fprintln(conn, "USER "+strings.Join(allconfig.IRCUser, ""))
+		fmt.Fprintln(conn, "JOIN "+strings.Join(allconfig.IRCChannels, ""))
 
 		MyReader := bufio.NewReader(conn)
 		for {
