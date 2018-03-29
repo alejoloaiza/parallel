@@ -6,6 +6,21 @@
 2. Go to your $GOPATH 
 3. Install dependencies with command ``` go get -v -u github.com/gocolly/colly/... ```
 4. Be patient, it takes some time.
-5. Change your config file located in ``` parallel/config/config.json ``` According to your needs
-5. Run ``` go build ``` located in your main folder
-5. Run the generated file ``` ./main ``` 
+5. Install another dependency to connect to PostgreSQL ``` go get -v -u github.com/lib/pq ```
+6. Create a config file located in ``` parallel/config/config.json ``` use this sample
+
+{ 
+	"IRCNick":"YourNick",
+	"IRCChannels":"#Yourchannel",
+	"IRCUser":"Your IRC user",
+	"API":"Your api get address",
+	"IRCServerPort":"irc.server.org:6667",
+	"DBHost":"Hostname of your postgresSQL DB",
+	"DBPort":"Port of your postgresSQL DB",
+	"DBUser":"User of your postgresSQL DB",
+	"DBPass":"Password of your postgresSQL DB",
+	"DBName":"Database Name your postgresSQL DB"
+}
+
+7. Run ``` go build ``` located in your main folder
+8. Run the generated file ``` ./main ``` 
