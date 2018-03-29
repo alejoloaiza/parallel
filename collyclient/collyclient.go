@@ -36,16 +36,20 @@ func Initcollyclient_Agency1() {
 	})
 
 	c.OnScraped(func(r *colly.Response) {
+		//fmt.Println(r.Request.URL.String())
+		if strings.HasPrefix(r.Request.URL.String(), "http://www.arrendamientossantafe.com/webs/santafe/inmueble") {
 		//fmt.Println("Finished", r.Request.URL)
-		fmt.Printf("Code %s Sector %s Area %s Price %s Rooms %s Baths %s ",RowCode,RowSector,RowArea,RowPrice,RowNumrooms,RowNumbaths)
-		fmt.Println("Finished ", r.Request.URL)
-		db.DBInsert(RowCode,"Santafe", RowSector, RowPrice, RowArea, RowNumrooms, RowNumbaths, r.Request.URL.String(), "Active")
+			fmt.Printf("Code %s Sector %s Area %s Price %s Rooms %s Baths %s ",RowCode,RowSector,RowArea,RowPrice,RowNumrooms,RowNumbaths)
+			fmt.Println("Finished ", r.Request.URL)
+			db.DBInsert(RowCode,"Santafe", RowSector, RowPrice, RowArea, RowNumrooms, RowNumbaths, r.Request.URL.String(), "Active")
+		}
 	})
 
 	// On every a element which has href attribute call callback
 	c.OnHTML("a[href]", func(e *colly.HTMLElement) {
 		link := e.Attr("href")
 		if strings.HasPrefix(link, "/webs/santafe/pages/basico") || strings.HasPrefix(link, "/webs/santafe/inmueble")  {
+			fmt.Println("LINK>> "+e.Request.AbsoluteURL(link)) 
 			c.Visit(e.Request.AbsoluteURL(link))
 		}else{
 			return

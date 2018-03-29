@@ -10,7 +10,7 @@
 6. Create a config file located in ``` parallel/config/config.json ``` use this sample
 ```
 { 
-    "IRCNick":["YourNick"],
+	"IRCNick":["YourNick"],
 	"IRCChannels":["#Yourchannel"],
 	"IRCUser":["user user user user user user"],
 	"API":["Your api get address"],
