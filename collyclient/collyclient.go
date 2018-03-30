@@ -4,7 +4,8 @@ import (
 	"fmt"
 	"github.com/gocolly/colly"
 	"strings"
-	"parallel/db"
+	//"parallel/db"
+	"github.com/gocolly/redisstorage"
 )
 
 
@@ -22,6 +23,17 @@ func Initcollyclient_Agency1() {
 
 	)
 
+	storage := &redisstorage.Storage{
+		Address:  "127.0.0.1:6379",
+		Password: "",
+		DB:       0,
+		Prefix:   "job01",
+	}
+
+	err := c.SetStorage(storage)
+	if err != nil {
+		panic(err)
+	}
 	c.OnHTML("li", func(e *colly.HTMLElement) {
 		TextTitle := strings.TrimSpace(e.ChildText("b.col_50"))
 		switch TextTitle {
@@ -41,7 +53,7 @@ func Initcollyclient_Agency1() {
 		//fmt.Println("Finished", r.Request.URL)
 			fmt.Printf("Code %s Sector %s Area %s Price %s Rooms %s Baths %s ",RowCode,RowSector,RowArea,RowPrice,RowNumrooms,RowNumbaths)
 			fmt.Println("Finished ", r.Request.URL)
-			db.DBInsert(RowCode,"Santafe", RowSector, RowPrice, RowArea, RowNumrooms, RowNumbaths, r.Request.URL.String(), "Active")
+			//db.DBInsertPostgres(RowCode,"Santafe", RowSector, RowPrice, RowArea, RowNumrooms, RowNumbaths, r.Request.URL.String(), "Active")
 		}
 	})
 
