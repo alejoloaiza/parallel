@@ -11,7 +11,8 @@ func main() {
 	if len(os.Args) > 1 { arg = os.Args[1] }
 
 	//collyclient.Initcollyclient_Agency1()
-	db.DBConnectPostgres(arg)
+	//db.DBConnectPostgres(arg)
+	db.DBConnectRedis()
 	irc.StartIRCprocess(arg)
 	
 
