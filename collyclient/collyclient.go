@@ -40,7 +40,7 @@ func Initcollyclient_Agency1() {
 			ScrapedAsset.Status=true
 			ScrapedAsset.Agency=agencyname
 			ScrapedAsset.Link = r.Request.URL.String()
-			fmt.Println("Inserted: " + ScrapedAsset.GetCode() + " Object: " + ScrapedAsset.ToJSON())
+			//fmt.Println("Inserted: " + ScrapedAsset.GetCode() + " Object: " + ScrapedAsset.ToJSON())
 			//db.DBInsertPostgres(RowCode,"Santafe", RowSector, RowPrice, RowArea, RowNumrooms, RowNumbaths, r.Request.URL.String(), "Active")
 			db.DBInsertRedis(ScrapedAsset.GetCode(),ScrapedAsset.ToJSON())
 			//fmt.Println("Inserted: " + ScrapedAsset.GetCode() + " Object: " + ScrapedAsset.ToJSON())
