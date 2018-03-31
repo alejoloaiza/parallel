@@ -5,9 +5,8 @@ import (
 	"fmt"
 	"strconv"
 	"encoding/json"
+	"encoding/hex"
 )
-
-
 type Asset struct {
 	Code string
 	Agency string
@@ -23,9 +22,10 @@ type Asset struct {
 func  (a *Asset) GetCode() string {
 	h := sha256.New()
 	h.Write([]byte(a.ToString()))
-	fmt.Printf("%x", h.Sum(nil))
-	return string(h.Sum(nil))
+	//fmt.Printf("%x", h.Sum(nil))
+	return hex.EncodeToString(h.Sum(nil))
 }
+
 func  (a *Asset) ToJSON() string {
 	b, err := json.Marshal(a)
 	if err != nil {
@@ -33,6 +33,7 @@ func  (a *Asset) ToJSON() string {
 	}
 	return string(b)
 }
+
 func (a *Asset) ToString() string{
 	var AssetString string
 	AssetString =  a.Code
