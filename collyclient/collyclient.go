@@ -52,6 +52,7 @@ func Initcollyclient_Agency1() {
 		link := e.Attr("href")
 		if strings.HasPrefix(link, "/webs/santafe/pages/basico") || strings.HasPrefix(link, "/webs/santafe/inmueble")  {
 			//fmt.Println("LINK>> "+e.Request.AbsoluteURL(link)) 
+			time.Sleep(500 * time.Millisecond)
 			c.Visit(e.Request.AbsoluteURL(link))
 		}else{
 			return
