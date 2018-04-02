@@ -13,10 +13,13 @@ import (
 func ProcessCommand(command []string, allconfig *config.Configuration) string {
 	var bodyString string
 	fmt.Println("Command request inside process: " + command[0])
-	if (strings.TrimSpace(command[0]) == "webscraping" && strings.TrimSpace(command[1]) == "agency1") {
-		go collyclient.Initcollyclient_Agency1()
+	if (strings.TrimSpace(command[0]) == "webscraping") {
+		if (strings.TrimSpace(command[1]) == "agency1") {
+			go collyclient.Initcollyclient_Agency1()
+		}else if (strings.TrimSpace(command[1]) == "agency2") {
+			go collyclient.Initcollyclient_Agency2()
+		}
 		bodyString = "Executed successfully in background as gorutine"
-		
 	}
 	if strings.TrimSpace(command[0]) == "api" {
 		req, err := http.NewRequest("GET", strings.Join(allconfig.API, ""), nil)
