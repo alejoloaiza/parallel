@@ -8,7 +8,9 @@ import (
 	"encoding/hex"
 )
 type Asset struct {
+	Business string
 	Code string
+	Type string
 	Agency string
 	Sector string
 	Area string
@@ -36,7 +38,9 @@ func  (a *Asset) ToJSON() string {
 
 func (a *Asset) ToString() string{
 	var AssetString string
-	AssetString =  a.Code
+	AssetString =  a.Business
+	AssetString = AssetString + "|" + a.Code
+	AssetString = AssetString + "|" + a.Type
 	AssetString = AssetString + "|" + a.Agency
 	AssetString = AssetString + "|" + a.Sector
 	AssetString = AssetString + "|" + a.Area
