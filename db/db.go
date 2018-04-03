@@ -28,6 +28,15 @@ func DBInsertRedis(id string,info string){
 		panic(err)
 	}
 }
+func DBGetAllKeysRedis(){
+	allkeys,_ := dbredis.Keys("*").Result()
+	for _, currentkey := range allkeys {
+		// element is the element from someSlice for where we are
+		//fmt.Println("KEY>> " + currentkey)
+		currentvalue,_ := dbredis.Get(currentkey).Result()
+		fmt.Println("KEY>> " + currentvalue)
+	}
+}
 func DBConnectPostgres(configpath string) {
 	allconfig := config.GetConfig(configpath)
   psqlInfo := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",strings.Join(allconfig.DBHost, ""), strings.Join(allconfig.DBPort, ""), strings.Join(allconfig.DBUser, ""),strings.Join(allconfig.DBPass, ""), strings.Join(allconfig.DBName, ""))

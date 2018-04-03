@@ -1,3 +1,5 @@
 main/main
 .vscode
 config/config.json
+dump.rdb
+main/dump.rdb
