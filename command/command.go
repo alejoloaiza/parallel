@@ -4,23 +4,26 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
-	"parallel/config"
-	"strings"
 	"parallel/collyclient"
+	"parallel/config"
 	"parallel/data"
-
+	"strings"
 )
 
 func ProcessCommand(command []string, allconfig *config.Configuration) string {
 	var bodyString string
 	fmt.Println("Command request inside process: " + command[0])
-	if (strings.TrimSpace(command[0]) == "process") {
-		data.GetAllKeys()
+	if strings.TrimSpace(command[0]) == "process" {
+		data.FillRawAssetsArray()
+
+		data.AssetClassifier()
+		data.PrintAssetsArray()
+
 	}
-	if (strings.TrimSpace(command[0]) == "webscraping") {
-		if (strings.TrimSpace(command[1]) == "agency1") {
+	if strings.TrimSpace(command[0]) == "webscraping" {
+		if strings.TrimSpace(command[1]) == "agency1" {
 			go collyclient.Initcollyclient_Agency1()
-		}else if (strings.TrimSpace(command[1]) == "agency2") {
+		} else if strings.TrimSpace(command[1]) == "agency2" {
 			go collyclient.Initcollyclient_Agency2()
 		}
 		bodyString = "Executed successfully in background as gorutine"

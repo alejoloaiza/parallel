@@ -28,14 +28,16 @@ func DBInsertRedis(id string,info string){
 		panic(err)
 	}
 }
-func DBGetAllKeysRedis(){
+func DBGetAllKeysRedis() []string {
+	var ReturnData []string
 	allkeys,_ := dbredis.Keys("*").Result()
 	for _, currentkey := range allkeys {
-		// element is the element from someSlice for where we are
 		//fmt.Println("KEY>> " + currentkey)
 		currentvalue,_ := dbredis.Get(currentkey).Result()
 		fmt.Println("KEY>> " + currentvalue)
+		ReturnData = append(ReturnData,currentvalue)
 	}
+	return ReturnData
 }
 func DBConnectPostgres(configpath string) {
 	allconfig := config.GetConfig(configpath)

@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"os"
 	"parallel/data"
 	"parallel/db"
@@ -19,10 +18,11 @@ func main() {
 	db.DBConnectPostgres(arg)
 	db.DBConnectRedis()
 	data.FillRawAssetsArray()
-	go irc.StartIRCprocess(arg)
-	data.PrintAssetsArray()
-	data.AssetTypeClassifier()
-	data.AssetBusinessClassifier()
-	fmt.Println("=======================================")
-	data.PrintAssetsArray()
+	irc.StartIRCprocess(arg)
+	//data.PrintAssetsArray()
+	/*
+		data.AssetClassifier()
+		fmt.Println("=======================================")
+		data.PrintAssetsArray()
+	*/
 }
