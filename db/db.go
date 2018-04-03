@@ -19,7 +19,7 @@ func DBConnectRedis(){
 		Password: "", // no password set
 		DB:       0,  // use default DB
 	})
-	fmt.Println(">>>>>>>>>>>>>>>>> Successfully connected to Database <<<<<<<<<<<<<<<<<")
+	//fmt.Println(">>>>>>>>>>>>>>>>> Successfully connected to Database <<<<<<<<<<<<<<<<<")
 
 }
 func DBInsertRedis(id string,info string){

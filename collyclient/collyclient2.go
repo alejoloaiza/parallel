@@ -19,47 +19,61 @@ type Responsejson struct {
 	Print string `json:"print"`
 	Order string `json:"order"`
 	Lang_id string `json:"lang_id"`
-	Total_Rows string `json:"total_rows"`
+	Total_Rows int `json:"total_rows"`
 }
 
 func Initcollyclient_Agency2() {
 	pagenum := 0
 	const agencyname = "Alnago"
+	var TotalRows int
+	var TotalCollected int = 0
 	var ScrapedAsset assets.Asset 
 	fmt.Println("Collect start at: " + time.Now().Format(time.Stamp) )
-	c := colly.NewCollector(
+	cLinks := colly.NewCollector(
 		colly.AllowedDomains("www.alnago.com"),
-		//colly.Async(true),
-		//colly.AllowURLRevisit(),
 	)
-	c.Limit(&colly.LimitRule{
-		DomainGlob:  "*www.alnago.com*",
+	cDetails := colly.NewCollector(
+		colly.AllowedDomains("www.alnago.com"),
+		colly.Async(true),
+	)
+	cLinks.Limit(&colly.LimitRule{
+		DomainGlob: "*www.alnago.com*",
 		//Parallelism: 1,
 		Delay: 4 * time.Second,
 		RandomDelay: 2 * time.Second,
 	})
+	cDetails.Limit(&colly.LimitRule{
+		DomainGlob: "*www.alnago.com*",
+		Parallelism: 5,
+		Delay: 1 * time.Second,
+		RandomDelay: 1 * time.Second,
+	})
 
-
-	c.OnScraped(func(r *colly.Response) { 
+	cLinks.OnScraped(func(r *colly.Response) { 
 		fmt.Println("Finished ", r.Request.URL) 
+		if TotalCollected >= TotalRows {
+			return
+		}
 		if strings.HasPrefix(r.Request.URL.String(), "http://www.alnago.com/index.php/frontend/ajax/es/") {
 			pagenum=pagenum+8
 			arr := []byte("order=id+DESC&view=grid&page_num="+ strconv.Itoa(pagenum) +"&v_search_option_4=Arriendo")
-			//fmt.Println("PostRaw: " + string(arr))
-			c.PostRaw("http://www.alnago.com/index.php/frontend/ajax/es/1/"+ strconv.Itoa(pagenum), arr)
-		
-		} else if strings.HasPrefix(r.Request.URL.String(), "http://www.alnago.com/index.php/property") {
-			ScrapedAsset.Code=strings.Split(r.Request.URL.String(), "/")[5]
-			ScrapedAsset.Status=true
-			ScrapedAsset.Agency=agencyname
-			ScrapedAsset.Link = r.Request.URL.String()
-			db.DBInsertRedis(ScrapedAsset.GetCode(),ScrapedAsset.ToJSON())
-		}
+			cLinks.PostRaw("http://www.alnago.com/index.php/frontend/ajax/es/1/"+ strconv.Itoa(pagenum), arr)
+		} 
+
 	})
-
-
+	cDetails.OnScraped(func(r *colly.Response) { 
+	 if strings.HasPrefix(r.Request.URL.String(), "http://www.alnago.com/index.php/property") {
+		ScrapedAsset.Code=strings.Split(r.Request.URL.String(), "/")[5]
+		ScrapedAsset.Status=true
+		ScrapedAsset.Agency=agencyname
+		ScrapedAsset.Link = r.Request.URL.String()
+		fmt.Println("Inserted: " + ScrapedAsset.GetCode() + " Object: " + ScrapedAsset.ToJSON())
+		db.DBInsertRedis(ScrapedAsset.GetCode(),ScrapedAsset.ToJSON())
+		TotalCollected++
+	}
+	})
 	// On every a element which has href attribute call callback
-	c.OnHTML("p.bottom-border", func(e *colly.HTMLElement) {
+	cDetails.OnHTML("p.bottom-border", func(e *colly.HTMLElement) {
 		TextTitle := strings.TrimSpace(e.ChildText("strong"))
 		switch TextTitle {
 			case "Dirección": ScrapedAsset.Sector=e.ChildText("span")
@@ -70,38 +84,37 @@ func Initcollyclient_Agency2() {
 			case "Alcobas:": ScrapedAsset.Numrooms=e.ChildText("span")
 			case "Baños:": ScrapedAsset.Numbaths=e.ChildText("span")
 			}
-
-
 	})
-	c.OnResponse(func(r *colly.Response) {
+	cLinks.OnResponse(func(r *colly.Response) {
 		rs := &Responsejson{}
 		_ = json.Unmarshal(r.Body, rs)
-		//fmt.Println(rs.Print)
-			
+			TotalRows= rs.Total_Rows 
 			doc, _ := goquery.NewDocumentFromReader(bytes.NewReader([]byte(rs.Print)))
 			doc.Find("a[href]").Each(func(i int, s *goquery.Selection) {
 				// For each item found, get the band and title
 				link,_ := s.Attr("href")
 				if strings.HasPrefix(link, "http://www.alnago.com/index.php/property") {
-					fmt.Println("LINK>> "+link) 
-					//c.Visit(link)
+					//fmt.Println("LINK>> "+link) 
+					cDetails.Visit(link)
 				}
-				
-			  })
+			})
 	})
-	c.OnRequest(func(r *colly.Request) {
+	cLinks.OnRequest(func(r *colly.Request) {
 		r.Ctx.Put("url", r.URL.String())
 		fmt.Println("Visiting", r.URL.String())
 	})
-	c.OnError(func(r *colly.Response, err error) {
-		fmt.Println("Request URL:", r.Request.URL, "failed with response:", r, "\nError:", err)
+	cDetails.OnError(func(r *colly.Response, err error) {
+		fmt.Println("DETAILS: Request URL:", r.Request.URL, "failed with response:", r, "\nError:", err)
+	})
+	cLinks.OnError(func(r *colly.Response, err error) {
+		fmt.Println("LINKS: Request URL:", r.Request.URL, "failed with response:", r, "\nError:", err)
 		arr := []byte("order=id+DESC&view=grid&page_num="+ strconv.Itoa(pagenum) +"&v_search_option_4=Arriendo")
-		fmt.Println("RETRY")
-		c.PostRaw("http://www.alnago.com/index.php/frontend/ajax/es/1/"+ strconv.Itoa(pagenum), arr)
+		fmt.Println("LINKS: Retry...")
+		cLinks.PostRaw("http://www.alnago.com/index.php/frontend/ajax/es/1/"+ strconv.Itoa(pagenum), arr)
 	
 	})
 	arr := []byte("order=id+DESC&view=list&page_num="+ strconv.Itoa(pagenum) +"&v_search_option_4=Arriendo")
-	c.PostRaw("http://www.alnago.com/index.php/frontend/ajax/es/1/" + strconv.Itoa(pagenum), arr)
+	cLinks.PostRaw("http://www.alnago.com/index.php/frontend/ajax/es/1/" + strconv.Itoa(pagenum), arr)
 
 	fmt.Println("Collect end at: " + time.Now().Format(time.Stamp) )
 }
