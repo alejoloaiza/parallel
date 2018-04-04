@@ -8,13 +8,13 @@ type Configuration struct {
 	IRCNick       []string
 	IRCChannels   []string
 	IRCUser       []string
-	API        []string
+	GoogleAPI     []string
 	IRCServerPort []string
-	DBHost		[]string
-	DBPort		[]string
-	DBUser		[]string
-	DBPass		[]string
-	DBName		[]string
+	DBHost        []string
+	DBPort        []string
+	DBUser        []string
+	DBPass        []string
+	DBName        []string
 }
 
 func GetConfig(configpath string) *Configuration {

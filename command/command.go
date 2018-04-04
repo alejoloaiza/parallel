@@ -15,10 +15,10 @@ func ProcessCommand(command []string, allconfig *config.Configuration) string {
 	fmt.Println("Command request inside process: " + command[0])
 	if strings.TrimSpace(command[0]) == "process" {
 		data.FillRawAssetsArray()
-
-		data.AssetClassifier()
 		data.PrintAssetsArray()
-
+		data.AssetClassifier()
+		fmt.Println("=======================================")
+		data.PrintAssetsArray()
 	}
 	if strings.TrimSpace(command[0]) == "webscraping" {
 		if strings.TrimSpace(command[1]) == "agency1" {
@@ -29,7 +29,7 @@ func ProcessCommand(command []string, allconfig *config.Configuration) string {
 		bodyString = "Executed successfully in background as gorutine"
 	}
 	if strings.TrimSpace(command[0]) == "api" {
-		req, err := http.NewRequest("GET", strings.Join(allconfig.API, ""), nil)
+		req, err := http.NewRequest("GET", strings.Join(allconfig.GoogleAPI, ""), nil)
 		if err != nil {
 			fmt.Println("Error in newRequest: ", err)
 

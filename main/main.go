@@ -2,7 +2,6 @@ package main
 
 import (
 	"os"
-	"parallel/data"
 	"parallel/db"
 	"parallel/irc"
 )
@@ -17,7 +16,7 @@ func main() {
 	//collyclient.Initcollyclient_Agency1()
 	db.DBConnectPostgres(arg)
 	db.DBConnectRedis()
-	data.FillRawAssetsArray()
+	//data.FillRawAssetsArray()
 	irc.StartIRCprocess(arg)
 	//data.PrintAssetsArray()
 	/*
@@ -25,4 +24,5 @@ func main() {
 		fmt.Println("=======================================")
 		data.PrintAssetsArray()
 	*/
+
 }
