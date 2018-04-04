@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"parallel/assets"
 	"parallel/db"
+	"parallel/utils"
 
 	"github.com/jbrukh/bayesian"
 	"github.com/schollz/closestmatch"
@@ -45,6 +46,8 @@ func AssetClassifier() {
 	for _, curAsset := range RawAssets {
 		curAsset.Type = cmType.Closest(curAsset.Type)
 		curAsset.Business = cmBusiness.Closest(curAsset.Business)
+		curAsset.Area = utils.NormalizeArea(curAsset.Area)
+		curAsset.Price = utils.NormalizeAmount(curAsset.Price)
 		TransformedAsset = append(TransformedAsset, curAsset)
 		//fmt.Println("Original: " + curAsset.Type + " Definido: " + cm.Closest(curAsset.Type))
 	}
