@@ -21,8 +21,8 @@ type Asset struct {
 	Numbaths string
 	Status   bool
 	Link     string
-	Lat      int
-	Lon      int
+	Lat      float64
+	Lon      float64
 }
 
 func (a *Asset) GetCode() string {
@@ -54,7 +54,7 @@ func (a *Asset) ToString() string {
 	AssetString = AssetString + "|" + a.Numbaths
 	AssetString = AssetString + "|" + strconv.FormatBool(a.Status)
 	AssetString = AssetString + "|" + a.Link
-	AssetString = AssetString + "|" + strconv.Itoa(a.Lat)
-	AssetString = AssetString + "|" + strconv.Itoa(a.Lon)
+	AssetString = AssetString + "|" + strconv.FormatFloat(a.Lat, 'E', -1, 64)
+	AssetString = AssetString + "|" + strconv.FormatFloat(a.Lon, 'E', -1, 64)
 	return AssetString
 }

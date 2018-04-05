@@ -45,6 +45,7 @@ func AssetClassifier() {
 		curAsset.Numrooms = utils.NormalizeAmount(curAsset.Numrooms)
 		curAsset.Numbaths = utils.NormalizeAmount(curAsset.Numbaths)
 		curAsset.Lat, curAsset.Lon = utils.NormalizeLocation(curAsset.Location)
+		//fmt.Println("Lat: " + strconv.FormatFloat(curAsset.Lat, 'e', -1, 64) + " Lon: " + strconv.FormatFloat(curAsset.Lon, 'e', -1, 64))
 		TransformedAsset = append(TransformedAsset, curAsset)
 		//fmt.Println("Original: " + curAsset.Type + " Definido: " + cm.Closest(curAsset.Type))
 	}
