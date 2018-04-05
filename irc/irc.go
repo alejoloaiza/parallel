@@ -9,12 +9,12 @@ import "time"
 import "parallel/command"
 import "parallel/config"
 
-func StartIRCprocess(configpath string) {
+func StartIRCprocess() {
 
-	allconfig := config.GetConfig(configpath)
+	//allconfig := config.GetConfig(configpath)
 
 	for {
-		conn, err := net.Dial("tcp", strings.Join(allconfig.IRCServerPort, ""))
+		conn, err := net.Dial("tcp", strings.Join(config.Localconfig.IRCServerPort, ""))
 
 		if err != nil {
 			fmt.Println(err)
@@ -22,9 +22,9 @@ func StartIRCprocess(configpath string) {
 			continue
 		}
 
-		fmt.Fprintln(conn, "NICK "+strings.Join(allconfig.IRCNick, ""))
-		fmt.Fprintln(conn, "USER "+strings.Join(allconfig.IRCUser, ""))
-		fmt.Fprintln(conn, "JOIN "+strings.Join(allconfig.IRCChannels, ""))
+		fmt.Fprintln(conn, "NICK "+strings.Join(config.Localconfig.IRCNick, ""))
+		fmt.Fprintln(conn, "USER "+strings.Join(config.Localconfig.IRCUser, ""))
+		fmt.Fprintln(conn, "JOIN "+strings.Join(config.Localconfig.IRCChannels, ""))
 
 		MyReader := bufio.NewReader(conn)
 		for {
@@ -66,7 +66,7 @@ func StartIRCprocess(configpath string) {
 				// If its a command BOT will execute the command given
 				if text[3] == ":!command:" {
 					repeat = false
-					commandresponse := command.ProcessCommand(text[4:], allconfig)
+					commandresponse := command.ProcessCommand(text[4:])
 					response = "PRIVMSG " + respondTo + " :" + commandresponse
 
 				}

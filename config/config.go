@@ -17,6 +17,8 @@ type Configuration struct {
 	DBName        []string
 }
 
+var Localconfig *Configuration
+
 func GetConfig(configpath string) *Configuration {
 	file, _ := os.Open(configpath)
 	defer file.Close()
@@ -26,5 +28,6 @@ func GetConfig(configpath string) *Configuration {
 	if err != nil {
 		fmt.Println("error:", err)
 	}
+	Localconfig = &configuration
 	return &configuration
 }
