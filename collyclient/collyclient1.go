@@ -38,7 +38,7 @@ func Initcollyclient_Agency1() {
 		case "Código":
 			ScrapedAsset.Code = e.ChildText("div.col_50")
 		case "Sector":
-			ScrapedAsset.Sector = e.ChildText("div.col_50")
+			ScrapedAsset.Location = e.ChildText("div.col_50")
 		case "Área":
 			ScrapedAsset.Area = e.ChildText("div.col_50")
 		case "Precio":

@@ -78,7 +78,9 @@ func Initcollyclient_Agency2() {
 		TextTitle := strings.TrimSpace(e.ChildText("strong"))
 		switch TextTitle {
 		case "Dirección":
-			ScrapedAsset.Sector = e.ChildText("span")
+			ScrapedAsset.Location = e.ChildText("span")
+		case "Ciudad:":
+			ScrapedAsset.City = e.ChildText("span")
 		case "Proposito:":
 			ScrapedAsset.Business = e.ChildText("span")
 		case "Precio de Arriendo:":
