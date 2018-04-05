@@ -10,7 +10,7 @@ import (
 	"strings"
 )
 
-func ProcessCommand(command []string, allconfig *config.Configuration) string {
+func ProcessCommand(command []string) string {
 	var bodyString string
 	fmt.Println("Command request inside process: " + command[0])
 	if strings.TrimSpace(command[0]) == "process" {
@@ -29,7 +29,7 @@ func ProcessCommand(command []string, allconfig *config.Configuration) string {
 		bodyString = "Executed successfully in background as gorutine"
 	}
 	if strings.TrimSpace(command[0]) == "api" {
-		req, err := http.NewRequest("GET", strings.Join(allconfig.GoogleAPI, ""), nil)
+		req, err := http.NewRequest("GET", strings.Join(config.Localconfig.GoogleAPI, ""), nil)
 		if err != nil {
 			fmt.Println("Error in newRequest: ", err)
 
