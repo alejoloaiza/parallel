@@ -27,6 +27,6 @@ go get -v -u "github.com/go-redis/redis"
 	"DBName":["Database Name your postgresSQL DB"]
 }
 ```
-6. Database setup: follow steps at DATABASE.md
+6. Database setup: follow steps at  [Database Setup](DATABASE.md)
 7. Run ``` go build ``` located in your main folder
 8. Run the generated file ``` ./main ``` 

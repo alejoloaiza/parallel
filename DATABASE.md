@@ -17,5 +17,28 @@ GRANT ALL ON SCHEMA yourschema TO youruser;
 4. Create the table structure using this command:
 
 ```
+CREATE TABLE "your_schema".webscrapingresults
+(
+    "Business" text COLLATE pg_catalog."default",
+    "Code" text COLLATE pg_catalog."default" NOT NULL,
+    "Type" text COLLATE pg_catalog."default",
+    "Agency" text COLLATE pg_catalog."default" NOT NULL,
+    "Location" text COLLATE pg_catalog."default",
+    "City" text COLLATE pg_catalog."default",
+    "Area" text COLLATE pg_catalog."default",
+    "Price" text COLLATE pg_catalog."default",
+    "Numrooms" text COLLATE pg_catalog."default",
+    "Numbaths" text COLLATE pg_catalog."default",
+    "Status" boolean,
+    "Link" text COLLATE pg_catalog."default",
+    "Coordinate" point,
+    CONSTRAINT webscrapingresults_pkey PRIMARY KEY ("Code", "Agency")
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
 
+ALTER TABLE "your_schema".webscrapingresults
+    OWNER to "your_user";
 ```
