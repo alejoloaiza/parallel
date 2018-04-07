@@ -31,7 +31,7 @@ CREATE TABLE "your_schema".webscrapingresults
     "Numbaths" text COLLATE pg_catalog."default",
     "Status" boolean,
     "Link" text COLLATE pg_catalog."default",
-    "Coordinate" point,
+    "Coordinate" geometry,
     CONSTRAINT webscrapingresults_pkey PRIMARY KEY ("Code", "Agency")
 )
 WITH (

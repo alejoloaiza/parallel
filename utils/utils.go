@@ -4,12 +4,20 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"math"
 	"net/http"
 	"parallel/config"
 	"regexp"
 	"strings"
 )
 
+func ToFixed(num float64, precision int) float64 {
+	output := math.Pow(10, float64(precision))
+	return float64(Round(num*output)) / output
+}
+func Round(num float64) int {
+	return int(num + math.Copysign(0.5, num))
+}
 func NormalizeArea(InputString string) string {
 	TempString := strings.ToLower(InputString)
 	TempString = strings.Replace(TempString, "m2", "", -1)
