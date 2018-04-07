@@ -47,6 +47,7 @@ func AssetClassifier() {
 		curAsset.Lat, curAsset.Lon = utils.NormalizeLocation(curAsset.Location)
 		//fmt.Println("Lat: " + strconv.FormatFloat(curAsset.Lat, 'e', -1, 64) + " Lon: " + strconv.FormatFloat(curAsset.Lon, 'e', -1, 64))
 		TransformedAsset = append(TransformedAsset, curAsset)
+		db.DBInsertPostgres(&curAsset)
 		//fmt.Println("Original: " + curAsset.Type + " Definido: " + cm.Closest(curAsset.Type))
 	}
 
