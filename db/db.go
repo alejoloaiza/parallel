@@ -30,6 +30,12 @@ func DBInsertRedis(id string, info string) {
 		panic(err)
 	}
 }
+func DBDeleteRedis(id string) {
+	err := dbredis.Del(id).Err()
+	if err != nil {
+		panic(err)
+	}
+}
 func DBGetAllKeysRedis() []string {
 	var ReturnData []string
 	allkeys, _ := dbredis.Keys("*").Result()
@@ -48,7 +54,7 @@ func DBConnectPostgres(configpath string) {
 	if err != nil {
 		panic(err)
 	}
-	fmt.Println(">>>>>>>>>>>>>>>>> Successfully connected to Database <<<<<<<<<<<<<<<<<")
+	//fmt.Println(">>>>>>>>>>>>>>>>> Successfully connected to Database <<<<<<<<<<<<<<<<<")
 }
 func DBInsertPostgres(a *assets.Asset) {
 

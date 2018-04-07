@@ -13,6 +13,10 @@ import (
 var RawAssets []assets.Asset
 var TransformedAsset []assets.Asset
 
+func FlushData() {
+	RawAssets = []assets.Asset{}
+	TransformedAsset = []assets.Asset{}
+}
 func FillRawAssetsArray() {
 	var TempAssets assets.Asset
 	rediskeys := db.DBGetAllKeysRedis()
@@ -30,7 +34,6 @@ func PrintAssetsArray() {
 
 // We define the Asset.Type based on similarity of words using schollz/closestmatch
 func AssetClassifier() {
-
 	TypeStuff := []string{"Apartamento", "Casa", "Bodega", "Finca", "Oficina", "Local"}
 	BusinessStuff := []string{"Arrendar", "Vender"}
 	bagSizes := []int{2, 3, 4, 5}
@@ -38,6 +41,7 @@ func AssetClassifier() {
 	cmType := closestmatch.New(TypeStuff, bagSizes)
 	cmBusiness := closestmatch.New(BusinessStuff, bagSizes)
 	for _, curAsset := range RawAssets {
+		CodeToDelete := curAsset.GetCode()
 		curAsset.Type = cmType.Closest(curAsset.Type)
 		curAsset.Business = cmBusiness.Closest(curAsset.Business)
 		curAsset.Area = utils.NormalizeArea(curAsset.Area)
@@ -45,10 +49,9 @@ func AssetClassifier() {
 		curAsset.Numrooms = utils.NormalizeAmount(curAsset.Numrooms)
 		curAsset.Numbaths = utils.NormalizeAmount(curAsset.Numbaths)
 		curAsset.Lat, curAsset.Lon = utils.NormalizeLocation(curAsset.Location)
-		//fmt.Println("Lat: " + strconv.FormatFloat(curAsset.Lat, 'e', -1, 64) + " Lon: " + strconv.FormatFloat(curAsset.Lon, 'e', -1, 64))
 		TransformedAsset = append(TransformedAsset, curAsset)
 		db.DBInsertPostgres(&curAsset)
-		//fmt.Println("Original: " + curAsset.Type + " Definido: " + cm.Closest(curAsset.Type))
+		db.DBDeleteRedis(CodeToDelete)
 	}
 
 }

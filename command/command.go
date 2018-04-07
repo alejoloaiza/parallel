@@ -11,6 +11,7 @@ func ProcessCommand(command []string) string {
 	var bodyString string
 	fmt.Println("Command request inside process: " + command[0])
 	if strings.TrimSpace(command[0]) == "process" {
+		data.FlushData()
 		data.FillRawAssetsArray()
 		data.PrintAssetsArray()
 		data.AssetClassifier()
@@ -25,6 +26,5 @@ func ProcessCommand(command []string) string {
 		}
 		bodyString = "Executed successfully in background as gorutine"
 	}
-
 	return bodyString
 }
