@@ -11,10 +11,15 @@ func ProcessCommand(command []string) string {
 	var bodyString string
 	fmt.Println("Command request inside process: " + command[0])
 	if strings.TrimSpace(command[0]) == "process" {
+		var api := "on"
 		data.FlushData()
 		data.FillRawAssetsArray()
 		data.PrintAssetsArray()
-		data.AssetClassifier()
+
+		if strings.TrimSpace(command[1]) == "apioff" {
+			api = "off"
+		}
+		data.AssetClassifier(api)
 		fmt.Println("=======================================")
 		data.PrintAssetsArray()
 	}

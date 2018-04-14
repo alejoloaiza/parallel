@@ -87,7 +87,6 @@ func Initcollyclient_Agency1() {
 		fmt.Println("Request URL:", r.Request.URL, "failed with response:", r, "\nError:", err)
 		fmt.Println("RETRYING")
 		cLinks.Visit(r.Request.URL.String())
-
 	})
 	cLinks.Visit("http://www.arrendamientossantafe.com/webs/santafe/pages/basico?bussines_type=Arrendar")
 
