@@ -33,7 +33,7 @@ func PrintAssetsArray() {
 }
 
 // We define the Asset.Type based on similarity of words using schollz/closestmatch
-func AssetClassifier() {
+func AssetClassifier(Api string) {
 	TypeStuff := []string{"Apartamento", "Casa", "Bodega", "Finca", "Oficina", "Local"}
 	BusinessStuff := []string{"Arrendar", "Vender"}
 	bagSizes := []int{2, 3, 4, 5}
@@ -48,7 +48,9 @@ func AssetClassifier() {
 		curAsset.Price = utils.NormalizeAmount(curAsset.Price)
 		curAsset.Numrooms = utils.NormalizeAmount(curAsset.Numrooms)
 		curAsset.Numbaths = utils.NormalizeAmount(curAsset.Numbaths)
-		curAsset.Lat, curAsset.Lon = utils.NormalizeLocation(curAsset.Location)
+		if Api == "on" {
+			curAsset.Lat, curAsset.Lon = utils.NormalizeLocation(curAsset.Location)
+		}
 		TransformedAsset = append(TransformedAsset, curAsset)
 		db.DBInsertPostgres(&curAsset)
 		db.DBDeleteRedis(CodeToDelete)
