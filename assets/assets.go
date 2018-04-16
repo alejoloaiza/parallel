@@ -38,6 +38,13 @@ func (a *Asset) ToJSON() string {
 	}
 	return string(b)
 }
+func (a *Asset) FromJSON(s string) {
+	input := []byte(s)
+	err := json.Unmarshal(input, a)
+	if err != nil {
+		fmt.Println("error:", err)
+	}
+}
 
 /*
 func (a *Asset) ToString() string {
