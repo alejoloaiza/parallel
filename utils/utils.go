@@ -36,8 +36,10 @@ func NormalizeAmount(InputString string) string {
 	return strings.Join(re.FindAllString(TempString, -1), "")
 }
 
-func NormalizeLocation(InputString string) (float64, float64) {
-
+func NormalizeLocation(InputString string, Api string) (float64, float64) {
+	if Api != "on" {
+		return 0, 0
+	}
 	apiurl := strings.Join(config.Localconfig.GoogleAPI, "") + InputString
 	req, err := http.NewRequest("GET", apiurl, nil)
 	if err != nil {

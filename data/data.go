@@ -48,9 +48,7 @@ func AssetClassifier(Api string) {
 		curAsset.Price = utils.NormalizeAmount(curAsset.Price)
 		curAsset.Numrooms = utils.NormalizeAmount(curAsset.Numrooms)
 		curAsset.Numbaths = utils.NormalizeAmount(curAsset.Numbaths)
-		if Api == "on" {
-			curAsset.Lat, curAsset.Lon = utils.NormalizeLocation(curAsset.Location)
-		}
+		curAsset.Lat, curAsset.Lon = utils.NormalizeLocation(curAsset.Location, Api)
 		TransformedAsset = append(TransformedAsset, curAsset)
 		db.DBInsertPostgres(&curAsset)
 		db.DBDeleteRedis(CodeToDelete)

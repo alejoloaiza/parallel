@@ -11,7 +11,7 @@ func ProcessCommand(command []string) string {
 	var bodyString string
 	fmt.Println("Command request inside process: " + command[0])
 	if strings.TrimSpace(command[0]) == "process" {
-		var api := "on"
+		api := "on"
 		data.FlushData()
 		data.FillRawAssetsArray()
 		data.PrintAssetsArray()
