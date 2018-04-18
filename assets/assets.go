@@ -18,6 +18,7 @@ type Asset struct {
 	Price    string  `json:"price"`
 	Numrooms string  `json:"numrooms"`
 	Numbaths string  `json:"numbaths"`
+	Parking  string  `json:"parking"`
 	Status   bool    `json:"status"`
 	Link     string  `json:"link"`
 	Lat      float64 `json:"lat"`
@@ -38,6 +39,7 @@ func (a *Asset) ToJSON() string {
 	}
 	return string(b)
 }
+
 func (a *Asset) FromJSON(s string) {
 	input := []byte(s)
 	err := json.Unmarshal(input, a)
