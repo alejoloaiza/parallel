@@ -14,14 +14,14 @@ func ProcessCommand(command []string) string {
 		api := "on"
 		data.FlushData()
 		data.FillRawAssetsArray()
-		data.PrintAssetsArray()
+		//data.PrintAssetsArray()
 
 		if strings.TrimSpace(command[1]) == "apioff" {
 			api = "off"
 		}
 		data.AssetClassifier(api)
 		fmt.Println("=======================================")
-		data.PrintAssetsArray()
+		//data.PrintAssetsArray()
 	}
 	if strings.TrimSpace(command[0]) == "webscraping" {
 		if strings.TrimSpace(command[1]) == "agency1" {
