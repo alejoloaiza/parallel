@@ -35,7 +35,15 @@ func NormalizeAmount(InputString string) string {
 	re := regexp.MustCompile("[0-9]+")
 	return strings.Join(re.FindAllString(TempString, -1), "")
 }
-
+func NormalizeParking(InputString string) string {
+	TempString := strings.ToLower(InputString)
+	TempString = strings.TrimSpace(TempString)
+	if TempString != "" && TempString != "0" {
+		return "1"
+	} else {
+		return "0"
+	}
+}
 func NormalizeLocation(InputString string, Api string) (float64, float64) {
 	if Api != "on" {
 		return 0, 0
