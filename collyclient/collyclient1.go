@@ -49,6 +49,8 @@ func Initcollyclient_Agency1() {
 			ScrapedAsset.Numbaths = e.ChildText("div.col_50")
 		case "Tipo de inmueble":
 			ScrapedAsset.Business = e.ChildText("div.col_50")
+		case "Parqueadero":
+			ScrapedAsset.Parking = e.ChildText("div.col_50")
 		}
 		TextTitle = strings.TrimSpace(e.ChildText("a"))
 		if strings.Contains(TextTitle, "- Código") {
@@ -88,7 +90,7 @@ func Initcollyclient_Agency1() {
 		fmt.Println("RETRYING")
 		cLinks.Visit(r.Request.URL.String())
 	})
-	cLinks.Visit("http://www.arrendamientossantafe.com/webs/santafe/pages/basico?bussines_type=Arrendar")
+	cLinks.Visit("http://www.arrendamientossantafe.com/webs/santafe/pages/basico?bussines_type=Venta")
 
 	fmt.Println("Collect end at: " + time.Now().Format(time.Stamp))
 }

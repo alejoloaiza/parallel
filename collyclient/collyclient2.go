@@ -57,7 +57,7 @@ func Initcollyclient_Agency2() {
 		}
 		if strings.HasPrefix(r.Request.URL.String(), "http://www.alnago.com/index.php/frontend/ajax/es/") {
 			pagenum = pagenum + 8
-			arr := []byte("order=id+DESC&view=grid&page_num=" + strconv.Itoa(pagenum) + "&v_search_option_4=Arriendo")
+			arr := []byte("order=id+DESC&view=grid&page_num=" + strconv.Itoa(pagenum) + "&v_search_option_4=Venta")
 			cLinks.PostRaw("http://www.alnago.com/index.php/frontend/ajax/es/1/"+strconv.Itoa(pagenum), arr)
 		}
 
@@ -118,12 +118,12 @@ func Initcollyclient_Agency2() {
 	})
 	cLinks.OnError(func(r *colly.Response, err error) {
 		fmt.Println("LINKS: Request URL:", r.Request.URL, "failed with response:", r, "\nError:", err)
-		arr := []byte("order=id+DESC&view=grid&page_num=" + strconv.Itoa(pagenum) + "&v_search_option_4=Arriendo")
+		arr := []byte("order=id+DESC&view=grid&page_num=" + strconv.Itoa(pagenum) + "&v_search_option_4=Venta")
 		fmt.Println("LINKS: Retry...")
 		cLinks.PostRaw("http://www.alnago.com/index.php/frontend/ajax/es/1/"+strconv.Itoa(pagenum), arr)
 
 	})
-	arr := []byte("order=id+DESC&view=list&page_num=" + strconv.Itoa(pagenum) + "&v_search_option_4=Arriendo")
+	arr := []byte("order=id+DESC&view=list&page_num=" + strconv.Itoa(pagenum) + "&v_search_option_4=Venta")
 	cLinks.PostRaw("http://www.alnago.com/index.php/frontend/ajax/es/1/"+strconv.Itoa(pagenum), arr)
 
 	fmt.Println("Collect end at: " + time.Now().Format(time.Stamp))
