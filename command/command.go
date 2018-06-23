@@ -28,6 +28,9 @@ func ProcessCommand(command []string) string {
 			go collyclient.Initcollyclient_Agency1()
 		} else if strings.TrimSpace(command[1]) == "agency2" {
 			go collyclient.Initcollyclient_Agency2()
+		} else if strings.TrimSpace(command[1]) == "agency3" {
+			fmt.Println("Agency3 executed")
+			go collyclient.Initcollyclient_Agency3()
 		}
 		bodyString = "Executed successfully in background as gorutine"
 	}

@@ -1,4 +1,4 @@
-package main
+package collyclient
 
 import (
 	"fmt"
@@ -26,40 +26,47 @@ func Initcollyclient_Agency3() {
 	cDetails.Limit(&colly.LimitRule{
 		DomainGlob: "*www.arrendamientosdelnorte.com*",
 	})
+	cDetails.OnHTML("#top-inm > div > div.col-xs-12.col-md-4.col-md-offset-5 > span", func(e *colly.HTMLElement) {
+		ScrapedAsset.Business = e.Text[:11]
+	})
 	cDetails.OnHTML("#detalle > div > div.col-xs-12.col-md-7", func(e *colly.HTMLElement) {
-		//fmt.Println(e.Text)
-		fmt.Println(e.ChildText("li"))
-		fmt.Println("==============================")
+		e.ForEach("li", func(_ int, a *colly.HTMLElement) {
+			Texts := strings.Split(strings.TrimSpace(a.Text), " ")
+			if len(Texts) > 1 {
+				Value := strings.TrimSpace(strings.Join(Texts[1:], ""))
+				switch strings.TrimSpace(Texts[0]) {
+				case "Valor:":
+					ScrapedAsset.Price = Value
+				case "Área:":
+					ScrapedAsset.Area = Value
+				case "Alcobas:":
+					ScrapedAsset.Numrooms = Value
+				case "Baños:":
+					ScrapedAsset.Numbaths = Value
+				case "Barrio:":
+					ScrapedAsset.Location = Value
+				//case "Dirección:":
+				//	ScrapedAsset.Location += Value + ", "
+				case "Tipo:":
+					ScrapedAsset.Type = Value
+				case "Parqueadero:":
+					ScrapedAsset.Parking = Value
+				case "Municipio:":
+					ScrapedAsset.City = Value
+				}
+			}
+
+		})
 		//fmt.Println(e.ChildText("b"))
 
-		TextTitle := strings.TrimSpace(e.ChildText("b.col_50"))
-		switch TextTitle {
-		case "Código":
-			ScrapedAsset.Code = e.ChildText("div.col_50")
-		case "Sector":
-			ScrapedAsset.Location = e.ChildText("div.col_50")
-		case "Área":
-			ScrapedAsset.Area = e.ChildText("div.col_50")
-		case "Precio":
-			ScrapedAsset.Price = e.ChildText("div.col_50")
-		case "Nº de alcobas":
-			ScrapedAsset.Numrooms = e.ChildText("div.col_50")
-		case "Nº de baños":
-			ScrapedAsset.Numbaths = e.ChildText("div.col_50")
-		case "Tipo de inmueble":
-			ScrapedAsset.Business = e.ChildText("div.col_50")
-		case "Parqueadero":
-			ScrapedAsset.Parking = e.ChildText("div.col_50")
-		}
-		TextTitle = strings.TrimSpace(e.ChildText("a"))
-		if strings.Contains(TextTitle, "- Código") {
-			ScrapedAsset.Type = TextTitle
-		}
 	})
 
 	cDetails.OnScraped(func(r *colly.Response) {
-		if strings.HasPrefix(r.Request.URL.String(), "http://www.arrendamientossantafe.com/webs/santafe/inmueble") {
-			//fmt.Println("Finished ", r.Request.URL)
+		if strings.HasPrefix(r.Request.URL.String(), "http://www.arrendamientosdelnorte.com") {
+			SplittedURL := strings.Split(r.Request.URL.String(), "/")
+			if len(SplittedURL) >= 5 {
+				ScrapedAsset.Code = SplittedURL[4]
+			}
 			ScrapedAsset.Status = true
 			ScrapedAsset.Agency = agencyname
 			ScrapedAsset.Link = r.Request.URL.String()
@@ -74,7 +81,6 @@ func Initcollyclient_Agency3() {
 		link := e.Attr("href")
 		//fmt.Println(link)
 		if strings.HasPrefix(link, "http://www.arrendamientosdelnorte.com/") && link != "http://www.arrendamientosdelnorte.com/" && !strings.HasPrefix(link, "http://www.arrendamientosdelnorte.com/buscador.php") {
-			fmt.Println(link)
 			cDetails.Visit(link)
 		} else {
 			return
@@ -103,6 +109,8 @@ func Initcollyclient_Agency3() {
 	fmt.Println("Collect end at: " + time.Now().Format(time.Stamp))
 }
 
+/*
 func main() {
 	Initcollyclient_Agency3()
 }
+*/
