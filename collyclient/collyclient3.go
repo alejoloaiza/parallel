@@ -19,20 +19,19 @@ func Initcollyclient_Agency3() {
 	)
 	cDetails := colly.NewCollector(
 		colly.AllowedDomains("www.arrendamientosdelnorte.com"),
-		colly.Async(true),
 	)
 	cLinks.Limit(&colly.LimitRule{
-		DomainGlob:  "*www.arrendamientosdelnorte.com*",
-		Delay:       4 * time.Second,
-		RandomDelay: 2 * time.Second,
+		DomainGlob: "*www.arrendamientosdelnorte.com*",
 	})
 	cDetails.Limit(&colly.LimitRule{
-		DomainGlob:  "*www.arrendamientosdelnorte.com*",
-		Parallelism: 5,
-		Delay:       1 * time.Second,
-		RandomDelay: 1 * time.Second,
+		DomainGlob: "*www.arrendamientosdelnorte.com*",
 	})
-	cDetails.OnHTML("li", func(e *colly.HTMLElement) {
+	cDetails.OnHTML("#detalle > div > div.col-xs-12.col-md-7", func(e *colly.HTMLElement) {
+		//fmt.Println(e.Text)
+		fmt.Println(e.ChildText("li"))
+		fmt.Println("==============================")
+		//fmt.Println(e.ChildText("b"))
+
 		TextTitle := strings.TrimSpace(e.ChildText("b.col_50"))
 		switch TextTitle {
 		case "Código":
@@ -73,10 +72,10 @@ func Initcollyclient_Agency3() {
 	// On every a element which has href attribute call callback
 	cLinks.OnHTML("a[href]", func(e *colly.HTMLElement) {
 		link := e.Attr("href")
-		if strings.HasPrefix(link, "/webs/santafe/inmueble") {
-			cDetails.Visit(e.Request.AbsoluteURL(link))
-		} else if strings.HasPrefix(link, "/webs/santafe/pages/basico") {
-			cLinks.Visit(e.Request.AbsoluteURL(link))
+		//fmt.Println(link)
+		if strings.HasPrefix(link, "http://www.arrendamientosdelnorte.com/") && link != "http://www.arrendamientosdelnorte.com/" && !strings.HasPrefix(link, "http://www.arrendamientosdelnorte.com/buscador.php") {
+			fmt.Println(link)
+			cDetails.Visit(link)
 		} else {
 			return
 		}
@@ -85,13 +84,19 @@ func Initcollyclient_Agency3() {
 	cLinks.OnRequest(func(r *colly.Request) {
 		fmt.Println("Visiting", r.URL.String())
 	})
+	cDetails.OnRequest(func(r *colly.Request) {
+		fmt.Println("Visiting", r.URL.String())
+	})
 	cLinks.OnError(func(r *colly.Response, err error) {
 		fmt.Println("Request URL:", r.Request.URL, "failed with response:", r, "\nError:", err)
 		fmt.Println("RETRYING")
 		cLinks.Visit(r.Request.URL.String())
 	})
+	cDetails.OnResponse(func(r *colly.Response) {
+		//fmt.Println(string(r.Body))
+	})
 	cLinks.OnResponse(func(r *colly.Response) {
-		fmt.Println(string(r.Body))
+		//fmt.Println(string(r.Body))
 	})
 	cLinks.Visit("http://www.arrendamientosdelnorte.com/buscador.php?concepto=Arriendo")
 
