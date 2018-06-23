@@ -3,4 +3,3 @@ main/main
 config/config.json
 dump.rdb
 main/dump.rdb
-collyclient/*
